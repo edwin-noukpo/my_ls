@@ -1,179 +1,180 @@
-total 4
-0 drwxr-xr-x 16 root root        3560 Sep 23 06:31 .
-4 drwxr-xr-x 19 root root        4096 Sep 23 06:31 ..
-0 crw-r--r--  1 root root     10, 235 Sep 23 06:31 autofs
-0 drwxr-xr-x  2 root root         580 Sep 23 06:31 block
-0 drwxr-xr-x  2 root root         100 Sep 23 06:31 bsg
-0 crw-rw----  1 root disk     10, 234 Sep 23 06:31 btrfs-control
-0 drwxr-xr-x  3 root root          60 Sep 23 06:31 bus
-0 drwxr-xr-x  2 root root        2760 Sep 23 06:31 char
-0 crw--w----  1 root tty       5,   1 Sep 23 06:31 console
-0 lrwxrwxrwx  1 root root          11 Sep 23 06:31 core -> /proc/kcore
-0 crw-------  1 root root     10, 125 Sep 23 06:31 cpu_dma_latency
-0 crw-------  1 root root     10, 203 Sep 23 06:31 cuse
-0 drwxr-xr-x  5 root root         100 Sep 23 06:31 disk
-0 drwxr-xr-x  3 root root         100 Sep 23 06:31 dri
-0 crw-rw-rw-  1 root root     10, 127 Sep 23 06:31 dxg
-0 lrwxrwxrwx  1 root root          13 Sep 23 06:31 fd -> /proc/self/fd
-0 crw-rw-rw-  1 root root      1,   7 Sep 23 06:31 full
-0 crw-rw-rw-  1 root root     10, 229 Sep 23 06:31 fuse
-0 drwxr-xr-x  2 root root           0 Sep 23 06:31 hugepages
-0 crw-------  1 root root    229,   0 Sep 23 06:31 hvc0
-0 crw--w----  1 root tty     229,   1 Sep 23 06:31 hvc1
-0 crw-------  1 root root    229,   2 Sep 23 06:31 hvc2
-0 crw-------  1 root root    229,   3 Sep 23 06:31 hvc3
-0 crw-------  1 root root    229,   4 Sep 23 06:31 hvc4
-0 crw-------  1 root root    229,   5 Sep 23 06:31 hvc5
-0 crw-------  1 root root    229,   6 Sep 23 06:31 hvc6
-0 crw-------  1 root root    229,   7 Sep 23 06:31 hvc7
-0 lrwxrwxrwx  1 root root          12 Sep 23 06:31 initctl -> /run/initctl
-0 crw-r--r--  1 root root      1,  11 Sep 23 06:31 kmsg
-0 crw-rw----  1 root kvm      10, 232 Sep 23 06:31 kvm
-0 lrwxrwxrwx  1 root root          28 Sep 23 06:31 log -> /run/systemd/journal/dev-log
-0 crw-rw----  1 root disk     10, 237 Sep 23 06:31 loop-control
-0 brw-rw----  1 root disk      7,   0 Sep 23 06:31 loop0
-0 brw-rw----  1 root disk      7,   1 Sep 23 06:31 loop1
-0 brw-rw----  1 root disk      7,   2 Sep 23 06:31 loop2
-0 brw-rw----  1 root disk      7,   3 Sep 23 06:31 loop3
-0 brw-rw----  1 root disk      7,   4 Sep 23 06:31 loop4
-0 brw-rw----  1 root disk      7,   5 Sep 23 06:31 loop5
-0 brw-rw----  1 root disk      7,   6 Sep 23 06:31 loop6
-0 brw-rw----  1 root disk      7,   7 Sep 23 06:31 loop7
-0 drwxr-xr-x  2 root root          60 Sep 23 06:31 mapper
-0 crw-r-----  1 root kmem      1,   1 Sep 23 06:31 mem
-0 drwxrwxrwt  2 root root          40 Sep 23 06:31 mqueue
-0 drwxr-xr-x  2 root root          60 Sep 23 06:31 net
-0 crw-rw-rw-  1 root root      1,   3 Sep 23 06:31 null
-0 crw-r-----  1 root kmem     10, 144 Sep 23 06:31 nvram
-0 crw-------  1 root root    108,   0 Sep 23 06:31 ppp
-0 crw-rw-rw-  1 root tty       5,   2 Sep 23 06:48 ptmx
-0 crw-------  1 root root    249,   0 Sep 23 06:31 ptp0
-0 lrwxrwxrwx  1 root root           4 Sep 23 06:31 ptp_hyperv -> ptp0
-0 drwxr-xr-x  2 root root           0 Sep 23 06:31 pts
-0 brw-rw----  1 root disk      1,   0 Sep 23 06:31 ram0
-0 brw-rw----  1 root disk      1,   1 Sep 23 06:31 ram1
-0 brw-rw----  1 root disk      1,  10 Sep 23 06:31 ram10
-0 brw-rw----  1 root disk      1,  11 Sep 23 06:31 ram11
-0 brw-rw----  1 root disk      1,  12 Sep 23 06:31 ram12
-0 brw-rw----  1 root disk      1,  13 Sep 23 06:31 ram13
-0 brw-rw----  1 root disk      1,  14 Sep 23 06:31 ram14
-0 brw-rw----  1 root disk      1,  15 Sep 23 06:31 ram15
-0 brw-rw----  1 root disk      1,   2 Sep 23 06:31 ram2
-0 brw-rw----  1 root disk      1,   3 Sep 23 06:31 ram3
-0 brw-rw----  1 root disk      1,   4 Sep 23 06:31 ram4
-0 brw-rw----  1 root disk      1,   5 Sep 23 06:31 ram5
-0 brw-rw----  1 root disk      1,   6 Sep 23 06:31 ram6
-0 brw-rw----  1 root disk      1,   7 Sep 23 06:31 ram7
-0 brw-rw----  1 root disk      1,   8 Sep 23 06:31 ram8
-0 brw-rw----  1 root disk      1,   9 Sep 23 06:31 ram9
-0 crw-rw-rw-  1 root root      1,   8 Sep 23 06:31 random
-0 lrwxrwxrwx  1 root root           4 Sep 23 06:31 rtc -> rtc0
-0 crw-------  1 root root    251,   0 Sep 23 06:31 rtc0
-0 brw-rw----  1 root disk      8,   0 Sep 23 06:31 sda
-0 brw-rw----  1 root disk      8,  16 Sep 23 06:31 sdb
-0 brw-rw----  1 root disk      8,  32 Sep 23 06:31 sdc
-0 crw-rw----  1 root disk     21,   0 Sep 23 06:31 sg0
-0 crw-rw----  1 root disk     21,   1 Sep 23 06:31 sg1
-0 crw-rw----  1 root disk     21,   2 Sep 23 06:31 sg2
-0 drwxrwxrwt  2 root root          40 Sep 23 06:31 shm
-0 lrwxrwxrwx  1 root root          15 Sep 23 06:31 stderr -> /proc/self/fd/2
-0 lrwxrwxrwx  1 root root          15 Sep 23 06:31 stdin -> /proc/self/fd/0
-0 lrwxrwxrwx  1 root root          15 Sep 23 06:31 stdout -> /proc/self/fd/1
-0 crw-rw-rw-  1 root tty       5,   0 Sep 23 06:31 tty
-0 crw--w----  1 root tty       4,   0 Sep 23 06:31 tty0
-0 crw--w----  1 root tty       4,   1 Sep 23 06:31 tty1
-0 crw--w----  1 root tty       4,  10 Sep 23 06:31 tty10
-0 crw--w----  1 root tty       4,  11 Sep 23 06:31 tty11
-0 crw--w----  1 root tty       4,  12 Sep 23 06:31 tty12
-0 crw--w----  1 root tty       4,  13 Sep 23 06:31 tty13
-0 crw--w----  1 root tty       4,  14 Sep 23 06:31 tty14
-0 crw--w----  1 root tty       4,  15 Sep 23 06:31 tty15
-0 crw--w----  1 root tty       4,  16 Sep 23 06:31 tty16
-0 crw--w----  1 root tty       4,  17 Sep 23 06:31 tty17
-0 crw--w----  1 root tty       4,  18 Sep 23 06:31 tty18
-0 crw--w----  1 root tty       4,  19 Sep 23 06:31 tty19
-0 crw--w----  1 root tty       4,   2 Sep 23 06:31 tty2
-0 crw--w----  1 root tty       4,  20 Sep 23 06:31 tty20
-0 crw--w----  1 root tty       4,  21 Sep 23 06:31 tty21
-0 crw--w----  1 root tty       4,  22 Sep 23 06:31 tty22
-0 crw--w----  1 root tty       4,  23 Sep 23 06:31 tty23
-0 crw--w----  1 root tty       4,  24 Sep 23 06:31 tty24
-0 crw--w----  1 root tty       4,  25 Sep 23 06:31 tty25
-0 crw--w----  1 root tty       4,  26 Sep 23 06:31 tty26
-0 crw--w----  1 root tty       4,  27 Sep 23 06:31 tty27
-0 crw--w----  1 root tty       4,  28 Sep 23 06:31 tty28
-0 crw--w----  1 root tty       4,  29 Sep 23 06:31 tty29
-0 crw--w----  1 root tty       4,   3 Sep 23 06:31 tty3
-0 crw--w----  1 root tty       4,  30 Sep 23 06:31 tty30
-0 crw--w----  1 root tty       4,  31 Sep 23 06:31 tty31
-0 crw--w----  1 root tty       4,  32 Sep 23 06:31 tty32
-0 crw--w----  1 root tty       4,  33 Sep 23 06:31 tty33
-0 crw--w----  1 root tty       4,  34 Sep 23 06:31 tty34
-0 crw--w----  1 root tty       4,  35 Sep 23 06:31 tty35
-0 crw--w----  1 root tty       4,  36 Sep 23 06:31 tty36
-0 crw--w----  1 root tty       4,  37 Sep 23 06:31 tty37
-0 crw--w----  1 root tty       4,  38 Sep 23 06:31 tty38
-0 crw--w----  1 root tty       4,  39 Sep 23 06:31 tty39
-0 crw--w----  1 root tty       4,   4 Sep 23 06:31 tty4
-0 crw--w----  1 root tty       4,  40 Sep 23 06:31 tty40
-0 crw--w----  1 root tty       4,  41 Sep 23 06:31 tty41
-0 crw--w----  1 root tty       4,  42 Sep 23 06:31 tty42
-0 crw--w----  1 root tty       4,  43 Sep 23 06:31 tty43
-0 crw--w----  1 root tty       4,  44 Sep 23 06:31 tty44
-0 crw--w----  1 root tty       4,  45 Sep 23 06:31 tty45
-0 crw--w----  1 root tty       4,  46 Sep 23 06:31 tty46
-0 crw--w----  1 root tty       4,  47 Sep 23 06:31 tty47
-0 crw--w----  1 root tty       4,  48 Sep 23 06:31 tty48
-0 crw--w----  1 root tty       4,  49 Sep 23 06:31 tty49
-0 crw--w----  1 root tty       4,   5 Sep 23 06:31 tty5
-0 crw--w----  1 root tty       4,  50 Sep 23 06:31 tty50
-0 crw--w----  1 root tty       4,  51 Sep 23 06:31 tty51
-0 crw--w----  1 root tty       4,  52 Sep 23 06:31 tty52
-0 crw--w----  1 root tty       4,  53 Sep 23 06:31 tty53
-0 crw--w----  1 root tty       4,  54 Sep 23 06:31 tty54
-0 crw--w----  1 root tty       4,  55 Sep 23 06:31 tty55
-0 crw--w----  1 root tty       4,  56 Sep 23 06:31 tty56
-0 crw--w----  1 root tty       4,  57 Sep 23 06:31 tty57
-0 crw--w----  1 root tty       4,  58 Sep 23 06:31 tty58
-0 crw--w----  1 root tty       4,  59 Sep 23 06:31 tty59
-0 crw--w----  1 root tty       4,   6 Sep 23 06:31 tty6
-0 crw--w----  1 root tty       4,  60 Sep 23 06:31 tty60
-0 crw--w----  1 root tty       4,  61 Sep 23 06:31 tty61
-0 crw--w----  1 root tty       4,  62 Sep 23 06:31 tty62
-0 crw--w----  1 root tty       4,  63 Sep 23 06:31 tty63
-0 crw--w----  1 root tty       4,   7 Sep 23 06:31 tty7
-0 crw--w----  1 root tty       4,   8 Sep 23 06:31 tty8
-0 crw--w----  1 root tty       4,   9 Sep 23 06:31 tty9
-0 crw-rw----  1 root dialout   4,  64 Sep 23 06:31 ttyS0
-0 crw-rw----  1 root dialout   4,  65 Sep 23 06:31 ttyS1
-0 crw-rw----  1 root dialout   4,  66 Sep 23 06:31 ttyS2
-0 crw-rw----  1 root dialout   4,  67 Sep 23 06:31 ttyS3
-0 crw-rw-rw-  1 root root      1,   9 Sep 23 06:31 urandom
-0 crw-rw----  1 root tty       7,   0 Sep 23 06:31 vcs
-0 crw-rw----  1 root tty       7,   1 Sep 23 06:31 vcs1
-0 crw-rw----  1 root tty       7,   2 Sep 23 06:31 vcs2
-0 crw-rw----  1 root tty       7,   3 Sep 23 06:31 vcs3
-0 crw-rw----  1 root tty       7,   4 Sep 23 06:31 vcs4
-0 crw-rw----  1 root tty       7,   5 Sep 23 06:31 vcs5
-0 crw-rw----  1 root tty       7,   6 Sep 23 06:31 vcs6
-0 crw-rw----  1 root tty       7, 128 Sep 23 06:31 vcsa
-0 crw-rw----  1 root tty       7, 129 Sep 23 06:31 vcsa1
-0 crw-rw----  1 root tty       7, 130 Sep 23 06:31 vcsa2
-0 crw-rw----  1 root tty       7, 131 Sep 23 06:31 vcsa3
-0 crw-rw----  1 root tty       7, 132 Sep 23 06:31 vcsa4
-0 crw-rw----  1 root tty       7, 133 Sep 23 06:31 vcsa5
-0 crw-rw----  1 root tty       7, 134 Sep 23 06:31 vcsa6
-0 crw-rw----  1 root tty       7,  64 Sep 23 06:31 vcsu
-0 crw-rw----  1 root tty       7,  65 Sep 23 06:31 vcsu1
-0 crw-rw----  1 root tty       7,  66 Sep 23 06:31 vcsu2
-0 crw-rw----  1 root tty       7,  67 Sep 23 06:31 vcsu3
-0 crw-rw----  1 root tty       7,  68 Sep 23 06:31 vcsu4
-0 crw-rw----  1 root tty       7,  69 Sep 23 06:31 vcsu5
-0 crw-rw----  1 root tty       7,  70 Sep 23 06:31 vcsu6
-0 drwxr-xr-x  2 root root          60 Sep 23 06:31 vfio
-0 crw-rw----  1 root kvm      10, 238 Sep 23 06:31 vhost-net
-0 drwxr-xr-x  2 root root          80 Sep 23 06:31 virtio-ports
-0 crw-------  1 root root    247,   0 Sep 23 06:31 vport0p0
-0 crw-------  1 root root    247,   1 Sep 23 06:31 vport0p1
-0 crw-rw-rw-  1 root root     10, 126 Sep 23 06:31 vsock
-0 crw-rw-rw-  1 root root      1,   5 Sep 23 06:31 zero
+/dev/:
+total: 4
+drwxr-xr-x 17	root kmem	3560	Sep 23 21:01 .
+drwxr-xr-x 25	root kmem	4096	Sep 23 21:01 ..
+crw-r--r-- 1	root kmem	0	Sep 23 21:01 autofs
+drwxr-xr-x 2	root kmem	580	Sep 23 21:01 block
+drwxr-xr-x 2	root kmem	100	Sep 23 21:01 bsg
+crw-rw---- 1	root kmem	0	Sep 23 21:01 btrfs-control
+drwxr-xr-x 3	root kmem	60	Sep 23 21:01 bus
+drwxr-xr-x 2	root kmem	2760	Sep 23 21:01 char
+crw--w---- 1	root kmem	0	Sep 23 21:25 console
+lrwxrwxrwx 1	root kmem	11	Sep 23 21:01 core
+crw------- 1	root kmem	0	Sep 23 21:01 cpu_dma_latency
+crw------- 1	root kmem	0	Sep 23 21:01 cuse
+drwxr-xr-x 5	root kmem	100	Sep 23 21:01 disk
+drwxr-xr-x 3	root kmem	100	Sep 23 21:01 dri
+crw-rw-rw- 1	root kmem	0	Sep 23 21:01 dxg
+lrwxrwxrwx 1	root kmem	13	Sep 23 21:01 fd
+crw-rw-rw- 1	root kmem	0	Sep 23 21:01 full
+crw-rw-rw- 1	root kmem	0	Sep 23 21:01 fuse
+drwxr-xr-x 2	root kmem	0	Sep 23 21:01 hugepages
+crw------- 1	root kmem	0	Sep 23 21:01 hvc0
+crw--w---- 1	root kmem	0	Sep 23 21:01 hvc1
+crw------- 1	root kmem	0	Sep 23 21:01 hvc2
+crw------- 1	root kmem	0	Sep 23 21:01 hvc3
+crw------- 1	root kmem	0	Sep 23 21:01 hvc4
+crw------- 1	root kmem	0	Sep 23 21:01 hvc5
+crw------- 1	root kmem	0	Sep 23 21:01 hvc6
+crw------- 1	root kmem	0	Sep 23 21:01 hvc7
+lrwxrwxrwx 1	root kmem	12	Sep 23 21:01 initctl
+crw-r--r-- 1	root kmem	0	Sep 23 21:01 kmsg
+crw-rw---- 1	root kmem	0	Sep 23 21:01 kvm
+lrwxrwxrwx 1	root kmem	28	Sep 23 21:01 log
+crw-rw---- 1	root kmem	0	Sep 23 21:01 loop-control
+brw-rw---- 1	root kmem	0	Sep 23 21:01 loop0
+brw-rw---- 1	root kmem	0	Sep 23 21:01 loop1
+brw-rw---- 1	root kmem	0	Sep 23 21:01 loop2
+brw-rw---- 1	root kmem	0	Sep 23 21:01 loop3
+brw-rw---- 1	root kmem	0	Sep 23 21:01 loop4
+brw-rw---- 1	root kmem	0	Sep 23 21:01 loop5
+brw-rw---- 1	root kmem	0	Sep 23 21:01 loop6
+brw-rw---- 1	root kmem	0	Sep 23 21:01 loop7
+drwxr-xr-x 2	root kmem	60	Sep 23 21:01 mapper
+crw-r----- 1	root kmem	0	Sep 23 21:01 mem
+drwxrwxrwx 2	root kmem	40	Sep 23 21:01 mqueue
+drwxr-xr-x 2	root kmem	60	Sep 23 21:01 net
+crw-rw-rw- 1	root kmem	0	Sep 23 21:01 null
+crw-r----- 1	root kmem	0	Sep 23 21:01 nvram
+crw------- 1	root kmem	0	Sep 23 21:01 ppp
+crw-rw-rw- 1	root kmem	0	Sep 23 22:17 ptmx
+crw------- 1	root kmem	0	Sep 23 21:01 ptp0
+lrwxrwxrwx 1	root kmem	4	Sep 23 21:01 ptp_hyperv
+drwxr-xr-x 2	root kmem	0	Sep 23 21:01 pts
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram0
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram1
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram10
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram11
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram12
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram13
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram14
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram15
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram2
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram3
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram4
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram5
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram6
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram7
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram8
+brw-rw---- 1	root kmem	0	Sep 23 21:01 ram9
+crw-rw-rw- 1	root kmem	0	Sep 23 21:01 random
+lrwxrwxrwx 1	root kmem	4	Sep 23 21:01 rtc
+crw------- 1	root kmem	0	Sep 23 21:01 rtc0
+brw-rw---- 1	root kmem	0	Sep 23 21:01 sda
+brw-rw---- 1	root kmem	0	Sep 23 21:01 sdb
+brw-rw---- 1	root kmem	0	Sep 23 21:01 sdc
+crw-rw---- 1	root kmem	0	Sep 23 21:01 sg0
+crw-rw---- 1	root kmem	0	Sep 23 21:01 sg1
+crw-rw---- 1	root kmem	0	Sep 23 21:01 sg2
+drwxrwxrwx 2	root kmem	40	Sep 23 21:01 shm
+lrwxrwxrwx 1	root kmem	15	Sep 23 21:01 stderr
+lrwxrwxrwx 1	root kmem	15	Sep 23 21:01 stdin
+lrwxrwxrwx 1	root kmem	15	Sep 23 21:01 stdout
+crw-rw-rw- 1	root kmem	0	Sep 23 21:01 tty
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty0
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty1
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty10
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty11
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty12
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty13
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty14
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty15
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty16
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty17
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty18
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty19
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty2
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty20
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty21
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty22
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty23
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty24
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty25
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty26
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty27
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty28
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty29
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty3
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty30
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty31
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty32
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty33
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty34
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty35
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty36
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty37
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty38
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty39
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty4
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty40
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty41
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty42
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty43
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty44
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty45
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty46
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty47
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty48
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty49
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty5
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty50
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty51
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty52
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty53
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty54
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty55
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty56
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty57
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty58
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty59
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty6
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty60
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty61
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty62
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty63
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty7
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty8
+crw--w---- 1	root kmem	0	Sep 23 21:01 tty9
+crw-rw---- 1	root kmem	0	Sep 23 21:01 ttyS0
+crw-rw---- 1	root kmem	0	Sep 23 21:01 ttyS1
+crw-rw---- 1	root kmem	0	Sep 23 21:01 ttyS2
+crw-rw---- 1	root kmem	0	Sep 23 21:01 ttyS3
+crw-rw-rw- 1	root kmem	0	Sep 23 21:01 urandom
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcs
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcs1
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcs2
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcs3
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcs4
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcs5
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcs6
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsa
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsa1
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsa2
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsa3
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsa4
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsa5
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsa6
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsu
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsu1
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsu2
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsu3
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsu4
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsu5
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vcsu6
+drwxr-xr-x 2	root kmem	60	Sep 23 21:01 vfio
+crw-rw---- 1	root kmem	0	Sep 23 21:01 vhost-net
+drwxr-xr-x 2	root kmem	80	Sep 23 21:01 virtio-ports
+crw------- 1	root kmem	0	Sep 23 21:01 vport0p0
+crw------- 1	root kmem	0	Sep 23 21:01 vport0p1
+crw-rw-rw- 1	root kmem	0	Sep 23 21:01 vsock
+crw-rw-rw- 1	root kmem	0	Sep 23 21:01 zero

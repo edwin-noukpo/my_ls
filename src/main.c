@@ -47,22 +47,130 @@ typedef struct dirpath_s {
     struct dirpath_s *n;
 } dirpath_t;
 
-typedef struct display_elements_s {
-    char *file_type;
-    char *file_permissions;
+typedef struct tmp_elements_s {
+    char *type;
+    char *rwxrwxrwx;
     int hard_link;
-    char *file_owner;
-    char *user_group;
-    int file_size;
-    char *date_and_time;
-    char *file_name;
-} display_elements_t;
+    char *uid;
+    char *gid;
+    int size;
+    char *time;
+    char *name;
+} tmp_elements_t;
 
-typedef struct display_myls_s {
+typedef struct outputfile_s {
+    char *type;
+    char *rwxrwxrwx;
+    int hard_link;
+    char *uid;
+    char *gid;
+    int size;
+    char *time;
+    char *name;
+    struct outputfile_s *n;
+} outputfile_t;
+
+typedef struct outputdir_s {
+    char *type;
+    char *rwxrwxrwx;
+    int hard_link;
+    char *uid;
+    char *gid;
+    int size;
+    char *time;
+    char *name;
+    struct outputdir_s *n;
+} outputdir_t;
+
+typedef struct dir_elem_s {
     char *dirpath;
-    display_elements_t *elements;
-    struct display_myls_s *n;
-} display_myls_t;
+    int *data;
+    outputdir_t *output;
+    struct dir_elem_s *n;
+} dir_elem_t;
+
+void add_outputfile(outputfile_t **outputfile, tmp_elements_t elem)
+{
+    outputfile_t *new = malloc(sizeof(outputfile_t));
+    outputfile_t *temp = (outputfile_t *)0x0;
+
+    *new = (outputfile_t) {elem.type, elem.rwxrwxrwx, elem.hard_link, elem.uid, elem.gid, elem.size, elem.time, elem.name, (outputfile_t *)0x0};
+    if (!(*outputfile) || strcmp((*outputfile)->name, elem.name) > 0) {
+        new->n = (*outputfile);
+        (*outputfile) = new;
+        return;
+    }
+    temp = (*outputfile);
+    for (; temp->n && strcmp(temp->n->name, elem.name) < 0; temp = temp->n);
+    new->n = temp->n;
+    temp->n = new;
+    return;
+}
+
+void add_outputdir(outputdir_t **outputdir, tmp_elements_t elem)
+{
+    outputdir_t *new = malloc(sizeof(outputdir_t));
+    outputdir_t *temp = (outputdir_t *)0x0;
+
+    *new = (outputdir_t) {elem.type, elem.rwxrwxrwx, elem.hard_link, elem.uid, elem.gid, elem.size, elem.time, elem.name, (outputdir_t *)0x0};
+    if (!(*outputdir) || strcmp((*outputdir)->name, elem.name) > 0) {
+        new->n = (*outputdir);
+        (*outputdir) = new;
+        return;
+    }
+    temp = (*outputdir);
+    for (; temp->n && strcmp(temp->n->name, elem.name) < 0; temp = temp->n);
+    new->n = temp->n;
+    temp->n = new;
+    return;
+}
+
+void add_dir_elem(dir_elem_t **dir_elem, char *dirpath, int *data, outputdir_t *output)
+{
+    dir_elem_t *new = malloc(sizeof(dir_elem_t));
+    dir_elem_t *temp = (dir_elem_t *)0x0;
+
+    *new = (dir_elem_t) {dirpath, data, output, (dir_elem_t *)0x0};
+    if (!(*dir_elem) || strcmp((*dir_elem)->dirpath, dirpath) > 0) {
+        new->n = (*dir_elem);
+        (*dir_elem) = new;
+        return;
+    }
+    temp = (*dir_elem);
+    for (; temp->n && strcmp(temp->n->dirpath, dirpath) < 0; temp = temp->n);
+    new->n = temp->n;
+    temp->n = new;
+    return;
+}
+
+void disp_file(outputfile_t *outputfile)
+{
+    outputfile_t *temp = outputfile;
+    for (; temp; temp = temp->n)
+        mini_printf("%s%s %d\t%s %s\t%d\t%s %s\n", temp->type, temp->rwxrwxrwx, temp->hard_link, temp->uid, temp->gid, temp->size, temp->time, temp->name);
+    return;
+}
+
+void disp_dir(outputdir_t *outputdir)
+{
+    outputdir_t *temp = outputdir;
+    for (; temp; temp = temp->n)
+        mini_printf("%s%s %d\t%s %s\t%d\t%s %s\n", temp->type, temp->rwxrwxrwx, temp->hard_link, temp->uid, temp->gid, temp->size, temp->time, temp->name);
+    return;
+}
+void display(dir_elem_t *dir_elem)
+{
+    dir_elem_t *temp = dir_elem;
+
+    for (; temp; temp = temp->n) {
+        mini_printf("%s:\n", temp->dirpath);
+        mini_printf("total: %d\n", temp->data[2]);
+        disp_dir(temp->output);
+        if (temp->n)
+            mini_printf("\n", temp->dirpath);
+    }
+    return;
+}
 
 void add_flags(options_t **list_opt, char flag)
 {
@@ -184,17 +292,9 @@ void free_filepath_s(filepath_t **list_file)
     return;
 }
 
-// void free_options(options_t **list_opt)
-// {
-//     options_t *temp = (*list_opt);
-
-//     for (; temp; temp = temp->n)
-//         free_options_s(&temp);
-// }
-
 int main(int ac, char **av)
 {
-    my_ls_t *myls = malloc(sizeof(my_ls_t)); 
+    my_ls_t *myls = malloc(sizeof(my_ls_t));
     options_t *list_opt = (options_t *)0x0;
     filepath_t *list_file = (filepath_t *)0x0;
     dirpath_t *list_dir = (dirpath_t *)0x0;
@@ -217,44 +317,60 @@ int main(int ac, char **av)
             err_mini_printf("error opening of: %s\n", myls->av[myls->index_av]);
         }
     }
-    disp_filepath(list_file);
-    // disp_options(list_opt);
-    // disp_dirpath(list_dir);
-    if (!list_dir) {
+    if (!list_dir && !list_file) {
         dirpath_t *new = malloc(sizeof(dirpath_t));
         *new = (dirpath_t) {".", (dirpath_t *)0x0};
         list_dir = new; 
     }
+    outputfile_t *outputfile = (outputfile_t *)0x0;
+    filepath_t *temp = list_file;
+    for (; temp; temp = temp->n) {
+        if (!lstat(temp->file_path, &s)) {
+            char *file_type = "s";
+            if (S_ISREG(s.st_mode))
+                file_type = "-";
+            if (S_ISLNK(s.st_mode))
+                file_type = "l";
+            if (S_ISCHR(s.st_mode))
+                file_type = "c";
+            if (S_ISBLK(s.st_mode))
+                file_type = "b";
+            if (S_ISFIFO(s.st_mode))
+                file_type = "p";
+            char *file_permission = my_strcat((s.st_mode & S_IRUSR) ? "r" : "-", (s.st_mode & S_IWUSR) ? "w" : "-");
+            file_permission = my_strcat(file_permission, (s.st_mode & S_IXUSR) ? "x" : "-");
+            file_permission = my_strcat(file_permission, (s.st_mode & S_IRGRP) ? "r" : "-");
+            file_permission = my_strcat(file_permission, (s.st_mode & S_IWGRP) ? "w" : "-");
+            file_permission = my_strcat(file_permission, (s.st_mode & S_IXGRP) ? "x" : "-");
+            file_permission = my_strcat(file_permission, (s.st_mode & S_IROTH) ? "r" : "-");
+            file_permission = my_strcat(file_permission, (s.st_mode & S_IWOTH) ? "w" : "-");
+            file_permission = my_strcat(file_permission, (s.st_mode & S_IXOTH) ? "x" : "-");
+            struct passwd *uid = getpwuid(s.st_uid);
+            struct group *gid = getgrgid(s.st_gid);
+            char *date_time = ctime(&s.st_mtime) + 4;
+            char **tab_date_time = split(date_time, ":\n");
+            char *tmp_date_time = my_strcat(*tab_date_time, ":");
+            tmp_date_time = my_strcat(tmp_date_time, tab_date_time[1]);
+            free_2d_array(tab_date_time);;
+            tmp_elements_t elem = (tmp_elements_t) {file_type, file_permission, 1,uid->pw_name, gid->gr_name,s.st_size, tmp_date_time, temp->file_path};
+            add_outputfile(&outputfile, elem);
+        } else
+            err_mini_printf("error opening of: %s\n", temp->file_path);
+    }
     DIR *directory = (DIR *)0x0;
     struct dirent *dirent_directory;
-    dirpath_t *temp = list_dir;
-    for (; temp; temp = temp->n) {
-        directory = opendir(temp->dir_path);
+    dirpath_t *temp2 = list_dir;
+    dir_elem_t *dir_elem = (dir_elem_t *)0x0;
+    for (; temp2; temp2 = temp2->n) {
+        int *data = malloc(sizeof(int) * 3);
+        outputdir_t *output = (outputdir_t *)0x0;
+        directory = opendir(temp2->dir_path);
         int total = 0;
         for (dirent_directory = readdir(directory); dirent_directory; dirent_directory = readdir(directory)) {
-            char *dir_tmp = my_strcat(temp->dir_path, "/");
+            char *dir_tmp = my_strcat(temp2->dir_path, "/");
             dir_tmp = my_strcat(dir_tmp, dirent_directory->d_name);
             int link = 1;
-            /*
-            total_int = ceil[
-                (file1_physical_blocks_in_use * file1_physical_block_size / file1_ls_block_size) + 
-                (file2_physical_blocks_in_use * file2_physical_block_size / file2_ls_block_size) + 
-                ... + 
-                (fileN_physical_blocks_in_use * fileN_physical_block_size / fileN_ls_block_size)
-            ]
-            */
-            if (!stat(dir_tmp, &s)) {
-                // mini_printf("File system block size: %d\nPhysical block size of file %d\n Physical Blocks in Use: %d\n\n", s.st_blocks, s.st_blksize, ((s.st_size/s.st_blksize) + 1) * 4);
-                double block = ((double)s.st_size / 1024.0);
-                // printf("%.5f-------%d\n", block , (int)block);
-                // if (block > 4)
-                //     block += 4;
-                if (block > 4.0 && block > (int)block)
-                    block += 1;
-                // if (block > 0 && block < 4)
-                //     block = 4;`
-                if (s.st_size < 4096)
-                    block = 0;
+            if (!lstat(dir_tmp, &s)) {
                 char *file_type = "s";
                 if (S_ISREG(s.st_mode))
                     file_type = "-";
@@ -267,7 +383,7 @@ int main(int ac, char **av)
                         char *dir_tmp2 = my_strcat(dir_tmp, "/");
                         dir_tmp2 = my_strcat(dir_tmp2, dirent_directory->d_name);
                         dir_tmp2 = my_strcat(dir_tmp2, "/");
-                        if (!stat(dir_tmp2, &s)) {
+                        if (!lstat(dir_tmp2, &s)) {
                             if (S_ISDIR(s.st_mode)) {
                                 link++;
                             }
@@ -285,8 +401,7 @@ int main(int ac, char **av)
                     file_type = "b";
                 if (S_ISFIFO(s.st_mode))
                     file_type = "p";
-                char *file_permission = (char *)0x0;
-                file_permission = my_strcat((s.st_mode & S_IRUSR) ? "r" : "-", (s.st_mode & S_IWUSR) ? "w" : "-");
+                char *file_permission = my_strcat((s.st_mode & S_IRUSR) ? "r" : "-", (s.st_mode & S_IWUSR) ? "w" : "-");
                 file_permission = my_strcat(file_permission, (s.st_mode & S_IXUSR) ? "x" : "-");
                 file_permission = my_strcat(file_permission, (s.st_mode & S_IRGRP) ? "r" : "-");
                 file_permission = my_strcat(file_permission, (s.st_mode & S_IWGRP) ? "w" : "-");
@@ -294,33 +409,29 @@ int main(int ac, char **av)
                 file_permission = my_strcat(file_permission, (s.st_mode & S_IROTH) ? "r" : "-");
                 file_permission = my_strcat(file_permission, (s.st_mode & S_IWOTH) ? "w" : "-");
                 file_permission = my_strcat(file_permission, (s.st_mode & S_IXOTH) ? "x" : "-");
-                struct passwd *uid;
-                struct group *gid;
-                uid = getpwuid(s.st_uid);
-                gid = getgrgid(s.st_gid);
+                struct passwd *uid = getpwuid(s.st_uid);
+                struct group *gid = getgrgid(s.st_gid);
                 char *date_time = ctime(&s.st_mtime) + 4;
                 char **tab_date_time = split(date_time, ":\n");
                 char *tmp_date_time = my_strcat(*tab_date_time, ":");
                 tmp_date_time = my_strcat(tmp_date_time, tab_date_time[1]);
                 free_2d_array(tab_date_time);
-                total += (int)block;
-                printf("%d\t%s%s %d\t%s %s\t%d\t%s %s\n", (int)block, file_type,
-                file_permission,
-                link, uid->pw_name,
-                gid->gr_name, s.st_size,
-                tmp_date_time,
-                dirent_directory->d_name);
-                free_f(file_permission);
-                free_f(tmp_date_time);
+                total += (int)(s.st_blocks / 2);
+                if (!my_strcmp(dirent_directory->d_name, "."))
+                    data[0] = s.st_blocks / 2;
+                if (!my_strcmp(dirent_directory->d_name, ".."))
+                    data[1] = s.st_blocks / 2;
+                tmp_elements_t elem = (tmp_elements_t) {file_type, file_permission, link ,uid->pw_name, gid->gr_name,s.st_size, tmp_date_time, dirent_directory->d_name};
+                add_outputdir(&output, elem);
                 free_f(dir_tmp);
-            } else {
+            } else
                 err_mini_printf("error opening of: %s\n", dirent_directory->d_name);
-            }
         }
-        // total = (total / 2);
-        mini_printf("total: %d\n", total);
-        closedir(directory);
+        data[2] = total;
+        add_dir_elem(&dir_elem, temp2->dir_path, data, output);
     }
+    disp_file(outputfile);
+    display(dir_elem);
     free_f(myls);
     return 0;
 }

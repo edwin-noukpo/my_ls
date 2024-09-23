@@ -1,0 +1,16 @@
+15
+test.c
+src
+README.md
+include
+tests
+a.out
+imagination.txt
+my_ls
+script_my_ls.sh
+subject_my_ls
+Makefile 
+.
+..
+aa
+aa
