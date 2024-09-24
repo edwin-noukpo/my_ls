@@ -8,6 +8,17 @@ typedef struct Node {
     struct Node *next;
 } Node;
 
+/*
+    Sep 24 12:00
+    Sep 23 23:33
+*/
+
+int my_datecmp(char *date1, char *date2)
+{
+    return;
+}
+
+
 // Fonction pour créer un nouveau nœud
 Node* create_node(char *word) {
     Node *new_node = (Node *)malloc(sizeof(Node));

@@ -67,6 +67,7 @@ typedef struct outputfile_s {
     int size;
     char *time;
     char *name;
+    struct outputfile_s *p;
     struct outputfile_s *n;
 } outputfile_t;
 
@@ -79,6 +80,7 @@ typedef struct outputdir_s {
     int size;
     char *time;
     char *name;
+    struct outputdir_s *p;
     struct outputdir_s *n;
 } outputdir_t;
 
@@ -86,23 +88,119 @@ typedef struct dir_elem_s {
     char *dirpath;
     int *data;
     outputdir_t *output;
+    struct dir_elem_s *p;
     struct dir_elem_s *n;
 } dir_elem_t;
+
+int my_datecmp(char *strdate1, char *strdate2)
+{
+    char *calendar[] = {"Jan", "Fev", "Mar", "Apr", "May",
+    "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", (char *)0x0};
+    char **tab_date1 = split(strdate1, " ");
+    char **tab_date2 = split(strdate2, " ");
+
+    int month1 = 0;
+    for(; my_strcmp(tab_date1[0], calendar[month1]); month1++);
+    char *date_time1 = my_strcat(tab_date1[1], tab_date1[2]);
+    int month2 = 0;
+    for(; my_strcmp(tab_date1[0], calendar[month2]); month2++);
+    char *date_time2 = my_strcat(tab_date2[1], tab_date2[2]);
+
+    int diff = 0;
+    if (month1 == month2)
+        diff = my_strcmp(date_time1, date_time2);
+    if (month1 < month2)
+        diff = -1;
+    if (month1 > month2)
+        diff = 1;
+    free_2d_array(tab_date1);
+    free_2d_array(tab_date2);
+    return diff;
+}
+
+void add_timeoutputfile(outputfile_t **timeoutputfile, tmp_elements_t elem)
+{
+    outputfile_t *new = malloc(sizeof(outputfile_t));
+    outputfile_t *temp = (outputfile_t *)0x0;
+
+    *new = (outputfile_t) {elem.type, elem.rwxrwxrwx, elem.hard_link, elem.uid, elem.gid, elem.size, elem.time, elem.name, (outputfile_t *)0x0, (outputfile_t *)0x0};
+    if (!(*timeoutputfile) || my_datecmp((*timeoutputfile)->time, elem.time) < 0) {
+        new->n = (*timeoutputfile);
+        if (*timeoutputfile)
+            (*timeoutputfile)->p = new;
+        (*timeoutputfile) = new;
+        return;
+    }
+    temp = (*timeoutputfile);
+    for (; temp->n && my_datecmp(temp->n->time, elem.time) > 0; temp = temp->n);
+    if (!temp->n) {
+        temp->n = new;
+        new->p = temp;
+        new->n = (outputfile_t *)0x0;
+        return;
+    }
+    new->n = temp->n;
+    new->p = temp;
+    if (temp->n)
+        temp->n->p = new;
+    temp->n = new;
+    return;
+}
+
+void add_timeoutputdir(outputdir_t **timeoutputdir, tmp_elements_t elem)
+{
+    outputdir_t *new = malloc(sizeof(outputdir_t));
+    outputdir_t *temp = (outputdir_t *)0x0;
+
+    *new = (outputdir_t) {elem.type, elem.rwxrwxrwx, elem.hard_link, elem.uid, elem.gid, elem.size, elem.time, elem.name, (outputdir_t *)0x0, (outputdir_t *)0x0};
+    if (!(*timeoutputdir) || my_datecmp((*timeoutputdir)->time, elem.time) < 0) {
+        new->n = (*timeoutputdir);
+        if (*timeoutputdir)
+            (*timeoutputdir)->p = new;
+        (*timeoutputdir) = new;
+        return;
+    }
+    temp = (*timeoutputdir);
+    for (; temp->n && my_datecmp(temp->n->time, elem.time) > 0; temp = temp->n);
+    if (!temp->n) {
+        temp->n = new;
+        new->p = temp;
+        new->n = (outputdir_t *)0x0;
+        return;
+    }
+    new->n = temp->n;
+    new->p = temp;
+    if (temp->n)
+        temp->n->p = new;
+    temp->n = new;
+    return;
+}
 
 void add_outputfile(outputfile_t **outputfile, tmp_elements_t elem)
 {
     outputfile_t *new = malloc(sizeof(outputfile_t));
     outputfile_t *temp = (outputfile_t *)0x0;
 
-    *new = (outputfile_t) {elem.type, elem.rwxrwxrwx, elem.hard_link, elem.uid, elem.gid, elem.size, elem.time, elem.name, (outputfile_t *)0x0};
-    if (!(*outputfile) || strcmp((*outputfile)->name, elem.name) > 0) {
+    *new = (outputfile_t) {elem.type, elem.rwxrwxrwx, elem.hard_link, elem.uid, elem.gid, elem.size, elem.time, elem.name, (outputfile_t *)0x0, (outputfile_t *)0x0};
+    if (!(*outputfile) || my_strcmp((*outputfile)->name, elem.name) > 0) {
         new->n = (*outputfile);
+        if (*outputfile)
+            (*outputfile)->p = new;
         (*outputfile) = new;
         return;
     }
     temp = (*outputfile);
-    for (; temp->n && strcmp(temp->n->name, elem.name) < 0; temp = temp->n);
+    for (; temp->n && my_strcmp(temp->n->name, elem.name) < 0; temp = temp->n);
+    if (!temp->n) {
+        temp->n = new;
+        new->p = temp;
+        new->n = (outputfile_t *)0x0;
+        return;
+    }
     new->n = temp->n;
+    new->p = temp;
+    if (temp->n)
+        temp->n->p = new;
     temp->n = new;
     return;
 }
@@ -112,15 +210,26 @@ void add_outputdir(outputdir_t **outputdir, tmp_elements_t elem)
     outputdir_t *new = malloc(sizeof(outputdir_t));
     outputdir_t *temp = (outputdir_t *)0x0;
 
-    *new = (outputdir_t) {elem.type, elem.rwxrwxrwx, elem.hard_link, elem.uid, elem.gid, elem.size, elem.time, elem.name, (outputdir_t *)0x0};
-    if (!(*outputdir) || strcmp((*outputdir)->name, elem.name) > 0) {
+    *new = (outputdir_t) {elem.type, elem.rwxrwxrwx, elem.hard_link, elem.uid, elem.gid, elem.size, elem.time, elem.name, (outputdir_t *)0x0, (outputdir_t *)0x0};
+    if (!(*outputdir) || my_strcmp((*outputdir)->name, elem.name) > 0) {
         new->n = (*outputdir);
+        if (*outputdir)
+            (*outputdir)->p = new;
         (*outputdir) = new;
         return;
     }
     temp = (*outputdir);
-    for (; temp->n && strcmp(temp->n->name, elem.name) < 0; temp = temp->n);
+    for (; temp->n && my_strcmp(temp->n->name, elem.name) < 0; temp = temp->n);
+    if (!temp->n) {
+        temp->n = new;
+        new->p = temp;
+        new->n = (outputdir_t *)0x0;
+        return;
+    }
     new->n = temp->n;
+    new->p = temp;
+    if (temp->n)
+        temp->n->p = new;
     temp->n = new;
     return;
 }
@@ -130,15 +239,26 @@ void add_dir_elem(dir_elem_t **dir_elem, char *dirpath, int *data, outputdir_t *
     dir_elem_t *new = malloc(sizeof(dir_elem_t));
     dir_elem_t *temp = (dir_elem_t *)0x0;
 
-    *new = (dir_elem_t) {dirpath, data, output, (dir_elem_t *)0x0};
-    if (!(*dir_elem) || strcmp((*dir_elem)->dirpath, dirpath) > 0) {
+    *new = (dir_elem_t) {dirpath, data, output, (dir_elem_t *)0x0, (dir_elem_t *)0x0};
+    if (!(*dir_elem) || my_strcmp((*dir_elem)->dirpath, dirpath) > 0) {
         new->n = (*dir_elem);
+        if (*dir_elem)
+            (*dir_elem)->p = new;
         (*dir_elem) = new;
         return;
     }
     temp = (*dir_elem);
-    for (; temp->n && strcmp(temp->n->dirpath, dirpath) < 0; temp = temp->n);
+    for (; temp->n && my_strcmp(temp->n->dirpath, dirpath) < 0; temp = temp->n);
+    if (!temp->n) {
+        temp->n = new;
+        new->p = temp;
+        new->n = (dir_elem_t *)0x0;
+        return;
+    }
     new->n = temp->n;
+    new->p = temp;
+    if (temp->n)
+        temp->n->p = new;
     temp->n = new;
     return;
 }
@@ -146,7 +266,57 @@ void add_dir_elem(dir_elem_t **dir_elem, char *dirpath, int *data, outputdir_t *
 void disp_file(outputfile_t *outputfile)
 {
     outputfile_t *temp = outputfile;
+
+    if (!temp)
+        return;
     for (; temp; temp = temp->n)
+        mini_printf("%s%s %d\t%s %s\t%d\t%s %s\n", temp->type, temp->rwxrwxrwx, temp->hard_link, temp->uid, temp->gid, temp->size, temp->time, temp->name);
+    return;
+}
+
+void time_disp_file(outputfile_t *outputfile)
+{
+
+    if (!outputfile)
+        return;
+    outputfile_t *temp2 = outputfile;
+    outputfile_t *timeoutputfile = (outputfile_t *)0x0;
+    for (; temp2; temp2 = temp2->n) {
+        tmp_elements_t elem = (tmp_elements_t) {temp2->type, temp2->rwxrwxrwx, temp2->hard_link ,temp2->uid, temp2->gid, temp2->size, temp2->time, temp2->name};
+        add_timeoutputfile(&timeoutputfile, elem);
+    }
+    outputfile_t *temp = timeoutputfile;
+    for (; temp; temp = temp->n)
+        mini_printf("%s%s %d\t%s %s\t%d\t%s %s\n", temp->type, temp->rwxrwxrwx, temp->hard_link, temp->uid, temp->gid, temp->size, temp->time, temp->name);
+    return;
+}
+
+void rev_time_disp_file(outputfile_t *outputfile)
+{
+
+    if (!outputfile)
+        return;
+    outputfile_t *temp2 = outputfile;
+    outputfile_t *timeoutputfile = (outputfile_t *)0x0;
+    for (; temp2; temp2 = temp2->n) {
+        tmp_elements_t elem = (tmp_elements_t) {temp2->type, temp2->rwxrwxrwx, temp2->hard_link ,temp2->uid, temp2->gid, temp2->size, temp2->time, temp2->name};
+        add_timeoutputfile(&timeoutputfile, elem);
+    }
+    outputfile_t *temp = timeoutputfile;
+    for (; temp->n; temp = temp->n);
+    for (; temp; temp = temp->p)
+        mini_printf("%s%s %d\t%s %s\t%d\t%s %s\n", temp->type, temp->rwxrwxrwx, temp->hard_link, temp->uid, temp->gid, temp->size, temp->time, temp->name);
+    return;
+}
+
+void rev_disp_file(outputfile_t *outputfile)
+{
+    outputfile_t *temp = outputfile;
+
+    if (!temp)
+        return;
+    for (; temp->n; temp = temp->n);
+    for (; temp; temp = temp->p)
         mini_printf("%s%s %d\t%s %s\t%d\t%s %s\n", temp->type, temp->rwxrwxrwx, temp->hard_link, temp->uid, temp->gid, temp->size, temp->time, temp->name);
     return;
 }
@@ -154,18 +324,97 @@ void disp_file(outputfile_t *outputfile)
 void disp_dir(outputdir_t *outputdir)
 {
     outputdir_t *temp = outputdir;
+
+    if (!temp)
+        return;
     for (; temp; temp = temp->n)
         mini_printf("%s%s %d\t%s %s\t%d\t%s %s\n", temp->type, temp->rwxrwxrwx, temp->hard_link, temp->uid, temp->gid, temp->size, temp->time, temp->name);
     return;
 }
+
+void time_display(dir_elem_t *dir_elem)
+{
+    dir_elem_t *temp = dir_elem;
+
+    if (!temp)
+        return;
+    for (; temp; temp = temp->n) {
+        mini_printf("%s:\n", temp->dirpath);
+        mini_printf("total: %d\n", temp->data[2]);
+        outputdir_t *timeoutdir = (outputdir_t *)0x0;
+        outputdir_t *temp2 = temp->output;
+        for (; temp2; temp2 = temp2->n) {
+            tmp_elements_t elem = (tmp_elements_t) {temp2->type, temp2->rwxrwxrwx, temp2->hard_link ,temp2->uid, temp2->gid, temp2->size, temp2->time, temp2->name};
+            add_timeoutputdir(&timeoutdir, elem);
+        }
+        disp_dir(timeoutdir);
+        if (temp->n)
+            mini_printf("\n", temp->dirpath);
+    }
+    return;
+}
+
 void display(dir_elem_t *dir_elem)
 {
     dir_elem_t *temp = dir_elem;
 
+    if (!temp)
+        return;
     for (; temp; temp = temp->n) {
         mini_printf("%s:\n", temp->dirpath);
         mini_printf("total: %d\n", temp->data[2]);
         disp_dir(temp->output);
+        if (temp->n)
+            mini_printf("\n", temp->dirpath);
+    }
+    return;
+}
+
+void rev_disp_dir(outputdir_t *outputdir)
+{
+    outputdir_t *temp = outputdir;
+
+    if (!temp)
+        return;
+    for (; temp->n; temp = temp->n);
+    for (; temp; temp = temp->p)
+        mini_printf("%s%s %d\t%s %s\t%d\t%s %s\n", temp->type, temp->rwxrwxrwx, temp->hard_link, temp->uid, temp->gid, temp->size, temp->time, temp->name);
+    return;
+}
+
+void rev_display(dir_elem_t *dir_elem)
+{
+    dir_elem_t *temp = dir_elem;
+
+    if (!temp)
+        return;
+    for (; temp->n; temp = temp->n);
+    for (; temp; temp = temp->p) {
+        mini_printf("%s:\n", temp->dirpath);
+        mini_printf("total: %d\n", temp->data[2]);
+        rev_disp_dir(temp->output);
+        if (temp->p)
+            mini_printf("\n", temp->dirpath);
+    }
+    return;
+}
+
+void rev_time_display(dir_elem_t *dir_elem)
+{
+    dir_elem_t *temp = dir_elem;
+
+    if (!temp)
+        return;
+    for (; temp; temp = temp->n) {
+        mini_printf("%s:\n", temp->dirpath);
+        mini_printf("total: %d\n", temp->data[2]);
+        outputdir_t *timeoutdir = (outputdir_t *)0x0;
+        outputdir_t *temp2 = temp->output;
+        for (; temp2; temp2 = temp2->n) {
+            tmp_elements_t elem = (tmp_elements_t) {temp2->type, temp2->rwxrwxrwx, temp2->hard_link ,temp2->uid, temp2->gid, temp2->size, temp2->time, temp2->name};
+            add_timeoutputdir(&timeoutdir, elem);
+        }
+        rev_disp_dir(timeoutdir);
         if (temp->n)
             mini_printf("\n", temp->dirpath);
     }
@@ -233,6 +482,8 @@ void disp_options(options_t *list_opt)
 {
     options_t *temp = list_opt;
 
+    if (!temp)
+        return;
     for (; temp; temp = temp->n)
         printf("flags: %c\n", temp->flag);
     return;
@@ -242,6 +493,8 @@ void disp_filepath(filepath_t *filepath)
 {
     filepath_t *temp = filepath;
 
+    if (!temp)
+        return;
     for (; temp; temp = temp->n)
         printf("filepath: %s\n", temp->file_path);
     return;
@@ -251,6 +504,8 @@ void disp_dirpath(dirpath_t *dirpath)
 {
     dirpath_t *temp = dirpath;
 
+    if (!temp)
+        return;
     for (; temp; temp = temp->n)
         printf("dirpath: %s\n", temp->dir_path);
     return;
@@ -337,31 +592,34 @@ int main(int ac, char **av)
                 file_type = "b";
             if (S_ISFIFO(s.st_mode))
                 file_type = "p";
-            char *file_permission = my_strcat((s.st_mode & S_IRUSR) ? "r" : "-", (s.st_mode & S_IWUSR) ? "w" : "-");
-            file_permission = my_strcat(file_permission, (s.st_mode & S_IXUSR) ? "x" : "-");
-            file_permission = my_strcat(file_permission, (s.st_mode & S_IRGRP) ? "r" : "-");
-            file_permission = my_strcat(file_permission, (s.st_mode & S_IWGRP) ? "w" : "-");
-            file_permission = my_strcat(file_permission, (s.st_mode & S_IXGRP) ? "x" : "-");
-            file_permission = my_strcat(file_permission, (s.st_mode & S_IROTH) ? "r" : "-");
-            file_permission = my_strcat(file_permission, (s.st_mode & S_IWOTH) ? "w" : "-");
-            file_permission = my_strcat(file_permission, (s.st_mode & S_IXOTH) ? "x" : "-");
+            char *rwxrwxrwx = malloc(sizeof(char) * 10); 
+            rwxrwxrwx[0] = (s.st_mode & S_IRUSR) ? 'r' : '-';
+            rwxrwxrwx[1] = (s.st_mode & S_IWUSR) ? 'w' : '-';
+            rwxrwxrwx[2] = (s.st_mode & S_IXUSR) ? 'x' : '-';
+            rwxrwxrwx[3] = (s.st_mode & S_IRGRP) ? 'r' : '-';
+            rwxrwxrwx[4] = (s.st_mode & S_IWGRP) ? 'w' : '-';
+            rwxrwxrwx[5] = (s.st_mode & S_IXGRP) ? 'x' : '-';
+            rwxrwxrwx[6] = (s.st_mode & S_IROTH) ? 'r' : '-';
+            rwxrwxrwx[7] = (s.st_mode & S_IWOTH) ? 'w' : '-';
+            rwxrwxrwx[8] = (s.st_mode & S_IXOTH) ? 'x' : '-';
+            rwxrwxrwx[9] = 0;
             struct passwd *uid = getpwuid(s.st_uid);
             struct group *gid = getgrgid(s.st_gid);
             char *date_time = ctime(&s.st_mtime) + 4;
             char **tab_date_time = split(date_time, ":\n");
             char *tmp_date_time = my_strcat(*tab_date_time, ":");
             tmp_date_time = my_strcat(tmp_date_time, tab_date_time[1]);
-            free_2d_array(tab_date_time);;
-            tmp_elements_t elem = (tmp_elements_t) {file_type, file_permission, 1,uid->pw_name, gid->gr_name,s.st_size, tmp_date_time, temp->file_path};
+            free_2d_array(tab_date_time);
+            tmp_elements_t elem = (tmp_elements_t) {file_type, rwxrwxrwx, 1,uid->pw_name, gid->gr_name,s.st_size, tmp_date_time, temp->file_path};
             add_outputfile(&outputfile, elem);
         } else
             err_mini_printf("error opening of: %s\n", temp->file_path);
     }
-    DIR *directory = (DIR *)0x0;
-    struct dirent *dirent_directory;
     dirpath_t *temp2 = list_dir;
     dir_elem_t *dir_elem = (dir_elem_t *)0x0;
     for (; temp2; temp2 = temp2->n) {
+        DIR *directory = (DIR *)0x0;
+        struct dirent *dirent_directory;
         int *data = malloc(sizeof(int) * 3);
         outputdir_t *output = (outputdir_t *)0x0;
         directory = opendir(temp2->dir_path);
@@ -370,6 +628,7 @@ int main(int ac, char **av)
             char *dir_tmp = my_strcat(temp2->dir_path, "/");
             dir_tmp = my_strcat(dir_tmp, dirent_directory->d_name);
             int link = 1;
+            char *d_name = my_strdup(dirent_directory->d_name);
             if (!lstat(dir_tmp, &s)) {
                 char *file_type = "s";
                 if (S_ISREG(s.st_mode))
@@ -393,22 +652,32 @@ int main(int ac, char **av)
                     closedir(directory);
                     file_type = "d";
                 }
-                if (S_ISLNK(s.st_mode))
+                if (S_ISLNK(s.st_mode)) {
+                    char *buffer = malloc(sizeof(char) * 256);
+                    ssize_t link_len = readlink(dir_tmp, buffer, sizeof(char) * 256);
+                    buffer[link_len] = 0;
+                    d_name = my_strcat(d_name, " -> ");
+                    d_name = my_strcat(d_name, buffer);
+                    free_f(buffer);
                     file_type = "l";
+                }
                 if (S_ISCHR(s.st_mode))
                     file_type = "c";
                 if (S_ISBLK(s.st_mode))
                     file_type = "b";
                 if (S_ISFIFO(s.st_mode))
                     file_type = "p";
-                char *file_permission = my_strcat((s.st_mode & S_IRUSR) ? "r" : "-", (s.st_mode & S_IWUSR) ? "w" : "-");
-                file_permission = my_strcat(file_permission, (s.st_mode & S_IXUSR) ? "x" : "-");
-                file_permission = my_strcat(file_permission, (s.st_mode & S_IRGRP) ? "r" : "-");
-                file_permission = my_strcat(file_permission, (s.st_mode & S_IWGRP) ? "w" : "-");
-                file_permission = my_strcat(file_permission, (s.st_mode & S_IXGRP) ? "x" : "-");
-                file_permission = my_strcat(file_permission, (s.st_mode & S_IROTH) ? "r" : "-");
-                file_permission = my_strcat(file_permission, (s.st_mode & S_IWOTH) ? "w" : "-");
-                file_permission = my_strcat(file_permission, (s.st_mode & S_IXOTH) ? "x" : "-");
+                char *rwxrwxrwx = malloc(sizeof(char) * 10);
+                rwxrwxrwx[0] = (s.st_mode & S_IRUSR) ? 'r' : '-';
+                rwxrwxrwx[1] = (s.st_mode & S_IWUSR) ? 'w' : '-';
+                rwxrwxrwx[2] = (s.st_mode & S_IXUSR) ? 'x' : '-';
+                rwxrwxrwx[3] = (s.st_mode & S_IRGRP) ? 'r' : '-';
+                rwxrwxrwx[4] = (s.st_mode & S_IWGRP) ? 'w' : '-';
+                rwxrwxrwx[5] = (s.st_mode & S_IXGRP) ? 'x' : '-';
+                rwxrwxrwx[6] = (s.st_mode & S_IROTH) ? 'r' : '-';
+                rwxrwxrwx[7] = (s.st_mode & S_IWOTH) ? 'w' : '-';
+                rwxrwxrwx[8] = (s.st_mode & S_IXOTH) ? 'x' : '-';
+                rwxrwxrwx[9] = 0;
                 struct passwd *uid = getpwuid(s.st_uid);
                 struct group *gid = getgrgid(s.st_gid);
                 char *date_time = ctime(&s.st_mtime) + 4;
@@ -418,10 +687,10 @@ int main(int ac, char **av)
                 free_2d_array(tab_date_time);
                 total += (int)(s.st_blocks / 2);
                 if (!my_strcmp(dirent_directory->d_name, "."))
-                    data[0] = s.st_blocks / 2;
+                    data[0] = (int)(s.st_blocks / 2);
                 if (!my_strcmp(dirent_directory->d_name, ".."))
-                    data[1] = s.st_blocks / 2;
-                tmp_elements_t elem = (tmp_elements_t) {file_type, file_permission, link ,uid->pw_name, gid->gr_name,s.st_size, tmp_date_time, dirent_directory->d_name};
+                    data[1] = (int)(s.st_blocks / 2);
+                tmp_elements_t elem = (tmp_elements_t) {file_type, rwxrwxrwx, link ,uid->pw_name, gid->gr_name,s.st_size, tmp_date_time, d_name};
                 add_outputdir(&output, elem);
                 free_f(dir_tmp);
             } else
@@ -429,9 +698,19 @@ int main(int ac, char **av)
         }
         data[2] = total;
         add_dir_elem(&dir_elem, temp2->dir_path, data, output);
+        closedir(directory);
     }
+    // disp_options(list_opt);
+    // disp_filepath(list_file);
+    // disp_dirpath(list_dir);
     disp_file(outputfile);
+    // rev_disp_file(outputfile);
+    // time_disp_file(outputfile);
+    // rev_time_disp_file(outputfile);
     display(dir_elem);
+    // rev_display(dir_elem);
+    // time_display(dir_elem);
+    // rev_time_display(dir_elem);
     free_f(myls);
     return 0;
 }
